@@ -1,76 +1,105 @@
-import random
-import time
+import os, random, time
+from datetime import datetime
+
+FILE_NAME = os.path.join(os.path.dirname(__file__), "static.txt")
+random_num = random.randint(1, 101)
+max_guesses = 7
+RED_COLOR = "\u001b[38;5;9m"
+RESET_COLOR = "\u001b[0m"
+YELLOW_COLOR = "\u001b[38;5;11m"
+
+"""Numbers game"""
 
 
-def difficult():
+def draw_winner():
     """
-    function input difficult level
-    1 - easy(1-30)
-    2- normal(1-50)
-    3 = hard(1-100)
+    func print winner
     :return:
-    integer
     """
-    while True:
-        level = input("easy 1-30[1]\nnormal 1-50[2]\nhard 1-100[3]\nDifficult level: ")
-        if not level.isdigit():
-            print(f"It's not a number: {level}")
-            continue
+    star_line = len(name) * "*"
+    print(f"{star_line}\n{RED_COLOR}*WIN!:*{RESET_COLOR}\n{star_line}")
+    for i in range(len(name)):
+        time.sleep(0.5)
+        print(YELLOW_COLOR + name[i] + RESET_COLOR, end="")
+    print(f"\n{star_line}")
+    pass
+
+
+def static():
+    """
+    Update statistic
+    """
+    time_now = datetime.now().strftime("%H:%M %d.%m.%Y")
+    with open(FILE_NAME, "a") as f:
+        f.write(f"\nCongratulation Winner {name} at {time_now}")
+    pass
+
+
+def draw_line():
+    """
+    Draw line with timing
+
+    :return:
+    """
+    star_arrow = 20 * ">"
+    for i in range(len(star_arrow)):
+        time.sleep(0.1)
+        print(RED_COLOR + star_arrow[i] + RESET_COLOR, end="")
+
+    pass
+
+
+while True:
+    # start game
+    if input("Do you want play? (Y/N)")[0].upper() != 'Y':
+        break
+    name = input("Please write Your name")  # name of user
+    winner = False
+
+    # Difficult
+    level = int(input(
+        F"To EASY(1-25) level press {1}\nTo NORMAL(1-50) level press {2}\nTo HARD(1-100) level press {3}\nLevel:"))
+    if level not in [1, 2, 3]:  # check incorrect difficult input
+        print("Incorrect input")
+        continue
+
+    elif level == 1:
+        random_num = random.randint(1, 25)
+        num_print = 25
+        pass
+    elif level == 2:
+        random_num = random.randint(1, 50)
+        num_print = 50
+        pass
+    elif level == 3:
+        random_num = random.randint(1, 101)
+        num_print = 100
+        pass
+
+    # game logic
+    for i in range(max_guesses):
+        draw_line()
+        guess = input(f"Enter number from 1 to {num_print}: ")
+        if not guess.isdigit() or int(guess) not in range(1, 101):
+            print("Yep! Wrong input\U0001F60F")
 
         else:
-            level = int(level)
-            if level not in [1, 2, 3]:
-                print("Only in range 1-3")
-                continue
-            elif level == 1:
-                user_l = 30
-                pass
-            elif level == 2:
-                user_l = 50
-                pass
+            guess = int(guess)
+
+            if guess == random_num:
+                draw_winner()
+                static()
+                winner = True
+                break
+                time.sleep(4)
+
             else:
-                user_l = 100
-                pass
-        return user_l
+                if guess < random_num:
+                    print("Your guess to small\U0001F60F")
+                else:
+                    print("Your guess to High\U0001F60F")
 
-
-def check_input():
-    """
-    Func to check guess input
-    :return:
-     int(input)
-    """
-    while True:
-        user_g = input("Your guess?")
-        if not user_g.isdigit():
-            print(f"It's not a number: {user_g}")
-            continue
-        else:
-            return int(user_g)
-
-
-def game_num(n):
-    max_gauses = 5
-    secret = random.randint(1, n)
-    win = False
-
-    for i in range(max_gauses):
-        number = check_input()
-
-        if number == secret:  # if winner
-            win = True
-            pr = "*You Win!\U0001F91F*"
-            print(f"{'*' * len(pr)}\n{pr}\n{'*' * len(pr)}")
-            break
-        else:  # to print small or high guess
-            if number < secret:
-                print("Your guess to small")
-                pass
-            else:
-                print("Your guess to high")
-                pass
-
-    if not win:  # if not winner
-        pr = f"*Game Over! Secret number was-{secret}\U0001F91F*"
-        print(f"{'*' * len(pr)}\n{pr}\n{'*' * len(pr)}")
+    if not winner:
+        draw_line()
+        print(F"GAME OVER {name}!\nNumber was: {random_num}")
         time.sleep(4)
