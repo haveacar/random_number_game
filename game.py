@@ -1,8 +1,7 @@
 import os, random, time
 from datetime import datetime
 
-FILE_NAME = os.path.join(os.path.dirname(__file__), "static.txt")
-random_num = random.randint(1, 101)
+FILE_NAME = os.path.join(os.path.dirname(__file__), "                ")
 max_guesses = 7
 RED_COLOR = "\u001b[38;5;9m"
 RESET_COLOR = "\u001b[0m"
@@ -80,7 +79,7 @@ while True:
     for i in range(max_guesses):
         draw_line()
         guess = input(f"Enter number from 1 to {num_print}: ")
-        if not guess.isdigit() or int(guess) not in range(1, 101):
+        if not guess.isdigit() or int(guess) not in range(1, num_print):
             print("Yep! Wrong input\U0001F60F")
 
         else:
