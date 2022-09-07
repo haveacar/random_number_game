@@ -48,6 +48,7 @@ def draw_line():
 
     pass
 
+
 def difficult():
     """
     Difficult level + Check input
@@ -75,7 +76,6 @@ def difficult():
     pass
 
 
-
 while True:
     # start game
     if input("Do you want play? (Y/N)")[0].upper() != 'Y':
@@ -83,7 +83,7 @@ while True:
     else:
         name = input("Please write Your name: ")  # name of user
         winner = False
-        num_print= 50
+        num_print = 50
         random_num = random.randint(1, num_print)
         difficult()
         for i in range(max_guesses):
@@ -116,6 +116,3 @@ while True:
             draw_line()
             print(F"GAME OVER {name}!\nNumber was: {random_num}")
             time.sleep(4)
-
-
-
